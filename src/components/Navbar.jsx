@@ -9,6 +9,8 @@ const Navbar = () => {
                 <ul className='all_list'>
                     <NavLink to={'/'}>Home</NavLink>
                     <NavLink to={'/data'}>Data</NavLink>
+                    <NavLink to={'/data'}>Data</NavLink>
+                    <NavLink to={'/home'}>Home</NavLink>
                     <NavLink to={'/about'}>About</NavLink>
                 </ul>
             </div>
