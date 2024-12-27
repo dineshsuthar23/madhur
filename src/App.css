@@ -1,0 +1,47 @@
+/* navbar css */
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  justify-items: baseline;
+  align-items: center;
+}
+
+/* Styling for the logo (h1) */
+.logo {
+  font-size: 24px;
+  
+  color: #333; 
+  margin: 0;  
+}
+
+/* Styling for the unordered list */
+.all_list {
+  list-style: none; /* Remove bullet points */
+  padding: 0; /* Remove padding */
+  margin: 15px 0 0;
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center-align the list items */
+  gap: 20px; /* Space between list items */
+}
+
+/* Styling for individual list items */
+.list {
+  font-size: 18px; /* Size of the list items */
+  color: #555; /* Medium gray color */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for list items */
+.list:hover {
+  color: #007BFF; /* Change to blue on hover */
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .all_list {
+    flex-direction: column; /* Stack list items vertically */
+    gap: 10px; /* Reduce gap between items */
+  }
+}
