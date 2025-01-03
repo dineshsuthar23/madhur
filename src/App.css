@@ -9,7 +9,6 @@
 /* Styling for the logo (h1) */
 .logo {
   font-size: 24px;
-  
   color: #333; 
   margin: 0;  
 }
@@ -45,3 +44,4 @@
     gap: 10px; /* Reduce gap between items */
   }
 }
+

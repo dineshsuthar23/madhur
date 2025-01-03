@@ -3,7 +3,7 @@
 import React, { useReducer } from "react";
 const Home = () => {
   const reducer = (state, action) => {
-    if (action.type === "increment") {
+    if (action === "increment") {
       return state + 1;
     }
     if (action.type === "decrement") {
@@ -14,8 +14,8 @@ const Home = () => {
   const [count, dispatch] = useReducer(reducer, 0);
   return (
     <div>
-      <h1>Count: {count}</h1>
-      <button onClick={() => dispatch({ type: "increment" })}>Increment</button>
+      <h1 >Count: {count}</h1>
+      <button onClick={() => dispatch("increment")}>Increment</button>
       <button onClick={() => dispatch({ type: "decrement" })}>Decrement</button>
     </div>
   );

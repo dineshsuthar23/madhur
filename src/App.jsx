@@ -5,6 +5,7 @@ import Data from './components/Data'
 import Home from './components/Home'
 import About from './components/About'
 import { createContext } from 'react'
+import RegistrationForm from './components/RegistrationForm'
 
 export const myContext = createContext()
 
@@ -20,11 +21,15 @@ function App() {
         },
         {
           path: '/data',
-          element: <Data />,
+          element: <Data />
         },
         {
           path: '/about',
           element: <About />
+        },
+        {
+          path: '/registration',
+          element: <RegistrationForm/>
         }
       ],
     },
