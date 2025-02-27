@@ -48,93 +48,139 @@
 const express = require('express');
 const app = express()
 app.use(express.json())
-const axios = require('axios');
+// const axios = require('axios');
 
-const User = [
-    {
-        id: 45,
-        name: 'john'
-    },
-    {
-        id: 46,
-        name: 'jack'
-    }
-]
-app.get('/user', async (req, res) => {
-    try {
-        // const response = await axios.get('https://jsonplaceholder.typicode.com/users')
-        // res.json(response.data)
-        res.json(User)
-    }
-    catch (error) {
-        console.log(error)
-    }
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/madhur')
+    .then(() => { console.log('Database connected successfully...') })
+    .catch(() => { console.log('Database is not connected') })
+
+const sch = mongoose.Schema({
+    name: String,
+    phone: Number,
+    email: String,
+    password: String
+})
+const User = mongoose.model('user', sch);
+
+app.get('/get', async (req, res) => {
+    const data = await User.find();
+    res.send(data)
 })
 
-
-app.post('/user', (req, res) => {
-    try {
-        const data = { id: req.body.id, name: req.body.name }
-        if (data.id == "" || data.name == "") {
-            res.send('id and name are empty')
-        }
-        else {
-            User.push(data)
-            res.send('done')
-        }
-    }
-    catch (error) {
-        console.log(error)
-    }
+app.get('/:empid', async (req, res) => {
+    const id = req.params.empid
+    console.log(id)
+    const data = await User.findById(id)
+    res.send(data)
 })
 
-
-app.put('/user/:emp', (req, res) => {
+app.post('/post', async (req, res) => {
     try {
-        const data = req.params.emp
-        const data1 = User.find(i => i.id == data)
-        if (!data1) {
-            res.status(404).send(`User not found`)
-        }
-        else {
-            // console.log(data1.id)
-            // console.log(data1.name)
-
-            // data1.id = req.body.id
-            data1.name = req.body.name
-
-            res.send('data updated successfully')
-        }
+        const { name, phone, email, password } = req.body;
+        if (!name || !email || !password || !phone) throw new Error("files must be complete")
+        const exist = await User.findOne({ email })
+        if (exist) throw new Error(`Email already exist: ${exist}`)
+        const newUser = new User({
+            name,
+            phone,
+            email,
+            password
+        })
+        await newUser.save()
+        res.send('User added')
     }
-    catch (error) {
-        res.status(500).send(`Error: ${error}`)
-    }
-})
-
-app.delete('/user/:id', (req, res) => {
-    try {
-        const id = req.params.id
-        // console.log(id)
-        const data = User.findIndex(i => i.id == id)
-        console.log(data)
-        if (data == -1) {
-            throw new Error(`User not found`)
-        }
-        else {
-            User.splice(data, 1)
-            res.send('done')
-        }
-        res.send('done')
-    }
-    catch(err){
-        console.log(`Error: ${err}`)
+    catch (err) {
+        res.send(`Error is: ${err.message}`)
     }
 })
 
 
 
-app.listen(5001, () => {
-    console.log('server is runnind..')
+// const User = [
+//     {
+//         id: 45,
+//         name: 'john'
+//     },
+//     {
+//         id: 46,
+//         name: 'jack'
+//     }
+// ]
+// app.get('/user', async (req, res) => {
+//     try {
+//         // const response = await axios.get('https://jsonplaceholder.typicode.com/users')
+//         // res.json(response.data)
+//         res.json(User)
+//     }
+//     catch (error) {
+//         console.log(error)
+//     }
+// })
+
+// app.post('/user', (req, res) => {
+//     try {
+//         const data = { id: req.body.id, name: req.body.name }
+//         if (data.id == "" || data.name == "") {
+//             res.send('id and name are empty')
+//         }
+//         else {
+//             User.push(data)
+//             res.send('done')
+//         }
+//     }
+//     catch (error) {
+//         console.log(error)
+//     }
+// })
+
+// app.put('/user/:emp', (req, res) => {
+//     try {
+//         const data = req.params.emp
+//         const data1 = User.find(i => i.id == data)
+//         if (!data1) {
+//             res.status(404).send(`User not found`)
+//         }
+//         else {
+//             // console.log(data1.id)
+//             // console.log(data1.name)
+
+//             // data1.id = req.body.id
+//             data1.name = req.body.name
+
+//             res.send('data updated successfully')
+//         }
+//     }
+//     catch (error) {
+//         res.status(500).send(`Error: ${error}`)
+//     }
+// })
+
+// app.delete('/user/:id', (req, res) => {
+//     try {
+//         const id = req.params.id
+//         // console.log(id)
+//         const data = User.findIndex(i => i.id == id)
+//         console.log(data)
+//         if (data == -1) {
+//             throw new Error(`User not found`)
+//         }
+//         else {
+//             User.splice(data, 1)
+//             res.send('done')
+//         }
+//         res.send('done')
+//     }
+//     catch(err){
+//         console.log(`Error: ${err}`)
+//     }
+// })
+
+
+const port = 5001
+app.listen(port, () => {
+    console.log(`server is runnind on ${port}`)
 })
 
 
