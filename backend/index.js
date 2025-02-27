@@ -96,6 +96,17 @@ app.post('/post', async (req, res) => {
     }
 })
 
+app.put('/:id', async(req, res) => {
+    const id = req.params.id
+    const newUser = await User.findByIdAndUpdate(id, req.body)
+    res.json(newUser)
+})
+app.delete('/:id', async(req, res) => {
+    const id = req.params.id
+    const newUser = await User.findByIdAndDelete(id)
+    res.json(`User was Delete successfully\n${newUser}`)
+})
+
 
 
 // const User = [
