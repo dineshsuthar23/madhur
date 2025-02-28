@@ -48,6 +48,7 @@
 const express = require('express');
 const app = express()
 app.use(express.json())
+const bcrypt = require('bcrypt')
 // const axios = require('axios');
 
 const mongoose = require('mongoose');
@@ -76,17 +77,18 @@ app.get('/:empid', async (req, res) => {
     res.send(data)
 })
 
-app.post('/post', async (req, res) => {
+app.post('/registration', async (req, res) => {
     try {
         const { name, phone, email, password } = req.body;
         if (!name || !email || !password || !phone) throw new Error("files must be complete")
         const exist = await User.findOne({ email })
         if (exist) throw new Error(`Email already exist: ${exist}`)
+        const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new User({
             name,
             phone,
             email,
-            password
+            password: hashedPassword
         })
         await newUser.save()
         res.send('User added')
@@ -96,17 +98,30 @@ app.post('/post', async (req, res) => {
     }
 })
 
-app.put('/:id', async(req, res) => {
+
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body
+    const exist = await User.findOne({ email })
+    console.log(exist.password)
+    if (!exist) throw new Error(`User Not exist`)
+    const compared = await bcrypt.compare(password, exist.password)
+    if (!compared) throw new Error(`Password does not match`)
+    res.send('login successfully...')
+})
+
+
+app.put('/:id', async (req, res) => {
     const id = req.params.id
     const newUser = await User.findByIdAndUpdate(id, req.body)
     res.json(newUser)
 })
-app.delete('/:id', async(req, res) => {
+
+app.delete('/:id', async (req, res) => {
     const id = req.params.id
     const newUser = await User.findByIdAndDelete(id)
     res.json(`User was Delete successfully\n${newUser}`)
 })
-
 
 
 // const User = [
