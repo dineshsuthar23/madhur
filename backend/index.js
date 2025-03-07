@@ -45,83 +45,83 @@
 
 
 
-const express = require('express');
-const app = express()
-app.use(express.json())
-const bcrypt = require('bcrypt')
-// const axios = require('axios');
+// const express = require('express');
+// const app = express()
+// app.use(express.json())
+// const bcrypt = require('bcrypt')
+// // const axios = require('axios');
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/madhur')
-    .then(() => { console.log('Database connected successfully...') })
-    .catch(() => { console.log('Database is not connected') })
+// mongoose.connect('mongodb://localhost:27017/madhur')
+//     .then(() => { console.log('Database connected successfully...') })
+//     .catch(() => { console.log('Database is not connected') })
 
-const sch = mongoose.Schema({
-    name: String,
-    phone: Number,
-    email: String,
-    password: String
-})
-const User = mongoose.model('user', sch);
+// const sch = mongoose.Schema({
+//     name: String,
+//     phone: Number,
+//     email: String,
+//     password: String
+// })
+// const User = mongoose.model('user', sch);
 
-app.get('/get', async (req, res) => {
-    const data = await User.find();
-    res.send(data)
-})
+// app.get('/get', async (req, res) => {
+//     const data = await User.find();
+//     res.send(data)
+// })
 
-app.get('/:empid', async (req, res) => {
-    const id = req.params.empid
-    console.log(id)
-    const data = await User.findById(id)
-    res.send(data)
-})
+// app.get('/:empid', async (req, res) => {
+//     const id = req.params.empid
+//     console.log(id)
+//     const data = await User.findById(id)
+//     res.send(data)
+// })
 
-app.post('/registration', async (req, res) => {
-    try {
-        const { name, phone, email, password } = req.body;
-        if (!name || !email || !password || !phone) throw new Error("files must be complete")
-        const exist = await User.findOne({ email })
-        if (exist) throw new Error(`Email already exist: ${exist}`)
-        const hashedPassword = await bcrypt.hash(password, 10)
-        const newUser = new User({
-            name,
-            phone,
-            email,
-            password: hashedPassword
-        })
-        await newUser.save()
-        res.send('User added')
-    }
-    catch (err) {
-        res.send(`Error is: ${err.message}`)
-    }
-})
-
-
-
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body
-    const exist = await User.findOne({ email })
-    console.log(exist.password)
-    if (!exist) throw new Error(`User Not exist`)
-    const compared = await bcrypt.compare(password, exist.password)
-    if (!compared) throw new Error(`Password does not match`)
-    res.send('login successfully...')
-})
+// app.post('/registration', async (req, res) => {
+//     try {
+//         const { name, phone, email, password } = req.body;
+//         if (!name || !email || !password || !phone) throw new Error("files must be complete")
+//         const exist = await User.findOne({ email })
+//         if (exist) throw new Error(`Email already exist: ${exist}`)
+//         const hashedPassword = await bcrypt.hash(password, 10)
+//         const newUser = new User({
+//             name,
+//             phone,
+//             email,
+//             password: hashedPassword
+//         })
+//         await newUser.save()
+//         res.send('User added')
+//     }
+//     catch (err) {
+//         res.send(`Error is: ${err.message}`)
+//     }
+// })
 
 
-app.put('/:id', async (req, res) => {
-    const id = req.params.id
-    const newUser = await User.findByIdAndUpdate(id, req.body)
-    res.json(newUser)
-})
 
-app.delete('/:id', async (req, res) => {
-    const id = req.params.id
-    const newUser = await User.findByIdAndDelete(id)
-    res.json(`User was Delete successfully\n${newUser}`)
-})
+// app.post('/login', async (req, res) => {
+//     const { email, password } = req.body
+//     const exist = await User.findOne({ email })
+//     console.log(exist.password)
+//     if (!exist) throw new Error(`User Not exist`)
+//     const compared = await bcrypt.compare(password, exist.password)
+//     if (!compared) throw new Error(`Password does not match`)
+//     res.send('login successfully...')
+// })
+
+
+// app.put('/:id', async (req, res) => {
+//     const id = req.params.id
+//     const newUser = await User.findByIdAndUpdate(id, req.body)
+//     res.json(newUser)
+// })
+
+// app.delete('/:id', async (req, res) => {
+//     const id = req.params.id
+//     const newUser = await User.findByIdAndDelete(id)
+//     res.json(`User was Delete successfully\n${newUser}`)
+// })
 
 
 // const User = [
@@ -204,10 +204,10 @@ app.delete('/:id', async (req, res) => {
 // })
 
 
-const port = 5001
-app.listen(port, () => {
-    console.log(`server is runnind on ${port}`)
-})
+// const port = 5001
+// app.listen(port, () => {
+//     console.log(`server is runnind on ${port}`)
+// })
 
 
 
